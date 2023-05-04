@@ -1,6 +1,7 @@
 import Webcam from "react-webcam";
 import { useCallback, useRef, useState } from "react";
 import http from "../httpService";
+import RecordRTC from "recordrtc";
 
 const WebcamVideo = () => {
   const webcamRef = useRef(null);
@@ -18,15 +19,24 @@ const WebcamVideo = () => {
   );
 
   const handleStopCaptureClick = useCallback(() => {
-    mediaRecorderRef.current.stop();
+    mediaRecorderRef.current.stopRecording(() => {
+      const blob = mediaRecorderRef.current.getBlob();
+      setRecordedChunks([blob]);
+    });
     setCapturing(false);
   }, [mediaRecorderRef, setCapturing]);
 
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
-    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+    const stream = webcamRef.current.stream;
+    const options = {
+      type: "video",
       mimeType: "video/webm",
-    });
+      bitsPerSecond: 128000,
+    };
+    const recorder = RecordRTC(stream, options);
+    mediaRecorderRef.current = recorder;
+    recorder.startRecording();
     mediaRecorderRef.current.addEventListener(
       "dataavailable",
       handleDataAvailable
