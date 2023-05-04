@@ -18,6 +18,11 @@ function App() {
     [setRecordedChunks]
   );
 
+  const handleStopCaptureClick = useCallback(() => {
+    mediaRecorderRef.current.stop();
+    setCapturing(false);
+  }, [mediaRecorderRef, setCapturing]);
+
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
@@ -28,12 +33,10 @@ function App() {
       handleDataAvailable
     );
     mediaRecorderRef.current.start();
+    setTimeout(() => {
+      handleStopCaptureClick();
+    }, 20000);
   }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
-
-  const handleStopCaptureClick = useCallback(() => {
-    mediaRecorderRef.current.stop();
-    setCapturing(false);
-  }, [mediaRecorderRef, setCapturing]);
 
   const handleDownload = useCallback(() => {
     if (recordedChunks.length) {
