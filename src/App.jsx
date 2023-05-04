@@ -81,6 +81,9 @@ function App() {
     height: { min: 720 },
   };
 
+  const dataSize = recordedChunks.length && recordedChunks[0].size;
+  const dataSizeToMB = (dataSize*0.000001).toFixed(1)
+
   return (
     <div className="App">
       <h1>React Recorder App</h1>
@@ -99,7 +102,7 @@ function App() {
         )}
         {recordedChunks.length > 0 && (
           <div className="button-box">
-            <button onClick={handleDownload}>Download</button>
+            <button onClick={handleDownload}>Download - {dataSizeToMB} MB</button>
             <button onClick={handleUpload}>Upload</button>
           </div>
         )}
