@@ -55,15 +55,15 @@ function App() {
     }
   }, [recordedChunks]);
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (recordedChunks.length) {
       const blob = new Blob(recordedChunks, {
         type: "video/webm",
       });
       console.log(blob);
-      let file = new File([blob.blob], "recorded-video.webm");
+      let file = new File([blob], "recorded-video.webm");
       const data = new FormData();
-      data.append("file", file, "recorded-video.webm");
+      data.append("video", file, "recorded-video.webm");
       http
         .post("/upload", data, {
           headers: {
