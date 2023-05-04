@@ -29,11 +29,11 @@ button {
     background-color: crimson;
     color: #fff;
     margin-top: 15px;
-    padding: 10px 40px;
+    padding: 10px 30px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    font-size: large;
+    font-size: medium;
     transition: all 0.15s ease;
 }
 
@@ -44,4 +44,11 @@ button:hover {
 h1 {
     color: #fff;
     margin-bottom: 20px;
+    font-size: x-large;
+}
+
+.button-box {
+    display: flex;
+    align-items: center;
+    gap: 0 25px;
 }

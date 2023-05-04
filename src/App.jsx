@@ -1,6 +1,7 @@
 import "./App.css";
 import Webcam from "react-webcam";
 import { useCallback, useRef, useState } from "react";
+import http from "./httpService";
 
 function App() {
   const webcamRef = useRef(null);
@@ -51,6 +52,30 @@ function App() {
     }
   }, [recordedChunks]);
 
+  const handleUpload = () => {
+    if (recordedChunks.length) {
+      const blob = new Blob(recordedChunks, {
+        type: "video/webm",
+      });
+      console.log(blob);
+      let file = new File([blob.blob], "recorded-video.webm");
+      const data = new FormData();
+      data.append("file", file, "recorded-video.webm");
+      http
+        .post("/upload", data, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
   const videoConstraints = {
     width: { min: 480 },
     height: { min: 720 },
@@ -73,7 +98,10 @@ function App() {
           <button onClick={handleStartCaptureClick}>Start Capture</button>
         )}
         {recordedChunks.length > 0 && (
-          <button onClick={handleDownload}>Download</button>
+          <div className="button-box">
+            <button onClick={handleDownload}>Download</button>
+            <button onClick={handleUpload}>Upload</button>
+          </div>
         )}
       </div>
     </div>
