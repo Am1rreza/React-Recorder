@@ -58,6 +58,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>React Recorder App</h1>
       <div className="Container">
         <Webcam
           audio={true}
